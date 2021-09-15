@@ -1,0 +1,138 @@
+version: "3.8"
+services:
+  api-gateway:
+    hostname: ${API_GATEWAY_HOST}
+    restart: always
+    build:
+      context: ./api-gateway
+      target: development
+    volumes:
+      - ./api-gateway/:/var/www/api-gateway
+    ports:
+      - ${API_GATEWAY_PORT}:${API_GATEWAY_PORT}
+    command: npm run start:dev
+    deploy:
+      resources:
+       limits:
+        memory: 300M
+        cpus: '0.50'
+       reservations:
+        memory: 100M
+        cpus: '0.25'
+    env_file:
+      - .env
+    networks:
+      - backend
+    # depends_on:
+    #   - teams
+    #   - players
+
+  players:
+    build:
+      context: ./players
+      target: development
+    restart: always
+    hostname: ${PLAYERS_HOST}
+    command: npm run start:dev --unhandled-rejections=strict
+    deploy:
+      resources:
+       limits:
+        memory: 300M
+        cpus: '0.50'
+       reservations:
+        memory: 100M
+        cpus: '0.25'
+    volumes:
+      - ./players/:/var/www/players
+    env_file:
+      - .env
+    networks:
+      - backend
+    links:
+      - ${DB_MONGODB_HOST}
+
+  teams:
+    build:
+      context: ./teams
+      target: development
+    restart: always
+    hostname: ${TEAMS_HOST}
+    command: npm run start:dev --unhandled-rejections=strict
+    deploy:
+      resources:
+       limits:
+        memory: 300M
+        cpus: '0.50'
+       reservations:
+        memory: 100M
+        cpus: '0.25'
+    volumes:
+      - ./teams/:/var/www/teams
+    ports:
+      - ${TEAMS_PORT}:${TEAMS_PORT}
+    env_file:
+      - .env
+    networks:
+      - backend
+    # links:
+    #   - ${DB_DYNAMODB_HOST}
+
+  mongodb:
+    image: mongo
+    hostname: ${DB_MONGODB_HOST}
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${DB_MONGODB_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${DB_MONGODB_PASSWORD}
+    ports:
+      - 27017:27017
+      - 9229:9229
+    networks:
+      - backend
+    volumes:
+      - mongodb-data:/data/db
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - ${DB_MONGODB_EXPRESS_PORT}:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${DB_MONGODB_USER}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${DB_MONGODB_PASSWORD}
+      ME_CONFIG_MONGODB_URL: mongodb://${DB_MONGODB_USER}:${DB_MONGODB_PASSWORD}@${DB_MONGODB_HOST}:27017/
+    networks:
+      - backend
+
+  dynamodb:
+    image: amazon/dynamodb-local
+    hostname: ${DB_DYNAMODB_HOST}
+    command: -jar DynamoDBLocal.jar -sharedDb -dbPath /home/dynamodblocal
+    ports:
+      - ${DB_DYNAMODB_PORT}:8000
+    volumes:
+      - dynamodb-data:/home/dynamodblocal
+    networks:
+      - backend
+
+  rmq:
+    image: rabbitmq:3-management-alpine
+    hostname: ${RMQ_HOST}
+    ports:
+      - ${RMQ_PORT}:5672
+      - ${RMQ_PORT_DASH}:15672
+    volumes:
+      - rmq-data:/var/lib/rabbitmq/
+      - rmq-log:/var/log/rabbitmq
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  rmq-data:
+  rmq-log:
+  mongodb-data:
+  dynamodb-data:

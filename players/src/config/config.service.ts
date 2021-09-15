@@ -1,6 +1,12 @@
 import { Transport } from '@nestjs/microservices';
 
-const URL = 'amqp://guest:guest@localhost:5672/nestmicroservice';
+const USER = process.env.RMQ_USER || 'guest';
+const PASSWORD = process.env.RMQ_PASSWORD || 'guest';
+const HOST = process.env.RMQ_HOST || 'rmq';
+const PORT = process.env.RMQ_PORT || '5672';
+const VHOST_NAME = process.env.RMQ_VHOST_NAME || 'microservice';
+
+const URL = `amqp://${USER}:${PASSWORD}@${HOST}:${PORT}/${VHOST_NAME}`;
 
 export class ConfigService {
   private readonly envConfig: { [key: string]: any } = null;

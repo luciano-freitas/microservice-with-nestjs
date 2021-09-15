@@ -1,0 +1,11 @@
+{
+    "serverlessConsole.services": [
+        {
+            "type": "dynamodb",
+            "title": "team",
+            "tableName": "team",
+            "region": "local",
+            "endpoint": "http://localhost:8000"
+        }
+    ]
+}

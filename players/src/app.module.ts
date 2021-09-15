@@ -10,7 +10,7 @@ import { PlayerSchema } from './schemas/player.schema';
   controllers: [PlayerController],
   imports: [
     MongooseModule.forRoot(
-      'mongodb://root:example@localhost:27017/test?authSource=admin&readPreference=primary&ssl=false',
+      'mongodb://root:example@mongodb:27017/microservice?authSource=admin&readPreference=primary&ssl=false',
     ),
     MongooseModule.forFeature([
       {

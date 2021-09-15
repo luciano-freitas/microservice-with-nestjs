@@ -1,0 +1,11 @@
+FROM node:14.8.0-alpine As development
+
+RUN mkdir -p /var/www/api-gateway
+WORKDIR /var/www/api-gateway
+
+RUN npm install -g npm@6.14.7
+
+COPY . .
+RUN npm install --only=development
+
+CMD npm run build

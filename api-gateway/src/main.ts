@@ -9,8 +9,9 @@ import { useContainer } from 'class-validator';
 import compression from 'fastify-compress';
 import { setupSwagger } from './setupSwagger';
 
-const DEFAULT_PORT = 4000;
-const DEFAULT_SWAGGER_PREFIX = '/docs';
+const IP = process.env.API_GATEWAY_IP || '0.0.0.0';
+const PORT = process.env.API_GATEWAY_PORT || 4000;
+const SWAGGER_PREFIX = process.env.API_GATEWAY_SWAGGER_PREFIX || '/doc';
 
 async function bootstrap() {
   const fastifyInstance = fastify({
@@ -23,10 +24,10 @@ async function bootstrap() {
   );
 
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
-  setupSwagger(app, process.env.SWAGGER_PREFIX || DEFAULT_SWAGGER_PREFIX);
+  setupSwagger(app, SWAGGER_PREFIX);
   app.register(compression);
 
-  await app.listen(process.env.PORT || DEFAULT_PORT, '0.0.0.0');
+  await app.listen(PORT, IP);
   console.log(`Application is running on: ${await app.getUrl()}`);
 }
 bootstrap();

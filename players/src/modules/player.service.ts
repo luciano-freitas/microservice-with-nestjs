@@ -11,6 +11,7 @@ export class PlayerService {
   ) {}
 
   public async create(data: CreatePlayerBodyDto): Promise<IPlayerDocument> {
+    await this.sleep(5000);
     const player = {
       ...data,
     };
@@ -29,5 +30,9 @@ export class PlayerService {
 
   public async deleteById(_id): Promise<void> {
     await this.playerModel.deleteOne({ _id });
+  }
+
+  private sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 }
