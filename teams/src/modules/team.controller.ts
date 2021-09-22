@@ -23,8 +23,9 @@ export class TeamController {
   @EventPattern('find_team_by_initials')
   public async findByInitials(
     @Payload() params: FindTeamByInitialsDto,
-  ): Promise<TeamResponseDto> {
-    return (await this.teamService.findByInitials(params)) as TeamResponseDto;
+  ): Promise<TeamResponseDto | null> {
+    const result = await this.teamService.findByInitials(params);
+    return (result || null) as TeamResponseDto | null;
   }
 
   @EventPattern('find_team_all')

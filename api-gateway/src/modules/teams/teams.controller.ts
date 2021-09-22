@@ -76,7 +76,7 @@ export class TeamsController {
     status: 204,
     description: 'Apenas exclui o registro',
   })
-  async delete(@Param() params: DeleteTeamByInitialsDto): Promise<void> {
-    await this.teamServiceClient.send('delete_team_by_initials', params);
+  async delete(@Param() params: DeleteTeamByInitialsDto): Promise<Observable<boolean>> {
+    return await this.teamServiceClient.send('delete_team_by_initials', params);
   }
 }

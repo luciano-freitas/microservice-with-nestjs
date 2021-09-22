@@ -14,18 +14,15 @@ services:
     deploy:
       resources:
        limits:
-        memory: 300M
-        cpus: '0.50'
+        memory: 512M
+        cpus: '1'
        reservations:
-        memory: 100M
-        cpus: '0.25'
+        memory: 200M
+        cpus: '0.70'
     env_file:
       - .env
     networks:
       - backend
-    # depends_on:
-    #   - teams
-    #   - players
 
   players:
     build:
@@ -34,14 +31,6 @@ services:
     restart: always
     hostname: ${PLAYERS_HOST}
     command: npm run start:dev --unhandled-rejections=strict
-    deploy:
-      resources:
-       limits:
-        memory: 300M
-        cpus: '0.50'
-       reservations:
-        memory: 100M
-        cpus: '0.25'
     volumes:
       - ./players/:/var/www/players
     env_file:
@@ -58,14 +47,6 @@ services:
     restart: always
     hostname: ${TEAMS_HOST}
     command: npm run start:dev --unhandled-rejections=strict
-    deploy:
-      resources:
-       limits:
-        memory: 300M
-        cpus: '0.50'
-       reservations:
-        memory: 100M
-        cpus: '0.25'
     volumes:
       - ./teams/:/var/www/teams
     ports:
@@ -74,8 +55,6 @@ services:
       - .env
     networks:
       - backend
-    # links:
-    #   - ${DB_DYNAMODB_HOST}
 
   mongodb:
     image: mongo
