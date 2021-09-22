@@ -1,7 +1,7 @@
 import { Optional } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { IsNumber, IsString } from 'class-validator';
+import { IsEnum, IsNumber, IsString } from 'class-validator';
 import { GenderEnum } from 'src/common/enum/gender.enum';
 
 export class CreatePlayerBodyDto {
@@ -35,6 +35,7 @@ export class CreatePlayerBodyDto {
 
   @Expose()
   @IsString()
+  @IsEnum(GenderEnum)
   @ApiProperty({
     required: true,
     description: 'Sexo do jogador',
