@@ -5,6 +5,9 @@
 Este repositório tem como objetivo demonstrar de uma forma simples e objetiva como trabalhar com micro serviços utilizando o framework NestJs integrado com algumas blibiotecas que agilizam no desenvolvimento, performance e documentação.
 
 
+## 🎯 Fluxo dos micro serviços
+![Alt text](/Diagram_nestjs.png "Fluxo do projeto")
+
 ## 🔒 Variáveis de ambiente
 
 Para que a aplicação rode perfeitamente, você precisará das seguintes variáveis de ambiente configurada no projeto
@@ -76,9 +79,9 @@ $ http://localhost:15672
 
 ## 🔦 Criação da Vhost no RabbitMQ
 
-1º Entre com usuário e senha
-2º Vá até a aba Admin
-3º No lado direito terá uma opção chamada (Virtual Hosts)
-4º Localize a opção "Add a new virtual host"
-5º Informe o "Name" pode ser o mesmo que está na variavel de ambiente [RMQ_VHOST_NAME]
-6º Clique no botão de "Add virtual host"
+- [1º] Entre com usuário e senha
+- [2º] Vá até a aba Admin
+- [3º] No lado direito terá uma opção chamada (Virtual Hosts)
+- [4º] Localize a opção "Add a new virtual host"
+- [5º] Informe o "Name" pode ser o mesmo que está na variavel de ambiente [RMQ_VHOST_NAME]
+- [6º] Clique no botão de "Add virtual host"
